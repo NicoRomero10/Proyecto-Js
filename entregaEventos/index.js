@@ -1,7 +1,3 @@
-
-
-
-
 let total = 0;
 
 
@@ -113,6 +109,3 @@ function saludo(e) {
     document.body.appendChild(efectivo);
         }
 }
-
-
-    
