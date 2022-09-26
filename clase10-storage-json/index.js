@@ -1,3 +1,211 @@
+
+
+let excursiones = [
+        {
+            id: 1,
+            nombre: "Paseo en barco",
+            precio: 4000,
+            imagen: "./img/paseo-barco"
+        },
+        {
+            id: 2,
+            nombre: "Buceo",
+            precio: 7500,
+            imagen: "./img/buceo.jpg"
+        },
+        {
+            id: 3,
+            nombre: "Avistaje de delfines",
+            precio: 4500,
+            // imagen: 
+        },
+        {
+            id: 4,
+            nombre: "Snorkel",
+            precio: 600,
+            // imagen: 
+        },
+        {
+            id: 5,
+            nombre: "Camino de las 7 playas",
+            precio: 3500,
+            // imagen: 
+        },
+        {
+            id: 6,
+            nombre: "Montaña",
+            precio: 2000,
+            // imagen: 
+        },
+
+        
+    ];
+    
+    
+    
+    const dibujarExcursiones = () => {
+        let contenedor = document.getElementById("container");
+        excursiones.forEach((producto,indice) => {
+        let card = document.createElement("div");
+        card.classList.add("card", "col-sm-12", "col-lg-3");
+        card.innerHTML=`<img src="${producto.imagen}" class="card-img-top" alt="./img/buceo.jpg">
+        <div class="card-body">
+          <h5 class="card-title">${producto.nombre}</h5>
+          <p class="card-text">${producto.precio}</p>
+          <a href="#" class="btn btn-info" onClick="agregarAlCarrito(${indice})" >Comprar</a>
+        </div>`;
+        contenedor.appendChild(card);
+        });
+    }
+
+    dibujarExcursiones();
+    let cart = []
+    let modalexcursion = document.getElementById("cart")
+    
+
+    
+    const agregarAlCarrito = (indice) => {
+        const indiceEncontradoCarrito = cart.findIndex((elemento)=>{
+            return elemento.id === excursiones[indice].id
+        });
+        if(indiceEncontradoCarrito === -1){
+            const productoAgregar = excursiones[indice]
+            productoAgregar.cantidad = 1;
+            cart.push(productoAgregar);
+            dibujarCarrito();
+        }else{
+            cart[indiceEncontradoCarrito].cantidad +=1;
+            dibujarCarrito()
+        }
+
+        
+    };
+    
+    
+    let total = 0;
+    const dibujarCarrito = ()=> {
+    modalexcursion.className = "cart";
+    modalexcursion.innerHTML="";
+    if(cart.length > 0){
+        cart.forEach((producto, indice)=>{
+            total = total + producto.precio * producto.cantidad;
+            const carritoContainer = document.createElement("div");
+            carritoContainer.className = "producto-carrito";
+            carritoContainer.innerHTML = `
+            <img class="car-img" src="${producto.imagen}"/>
+            <div class="product-details">
+            ${producto.nombre}
+            </div>
+            <div class="product-details"> Cantidad:
+            ${producto.cantidad}
+            </div>
+            <div class="product-details"> Precio: $
+            ${producto.precio}
+            </div>
+            <div class="product-details"> Subtotal: $ 
+            ${producto.precio * producto.cantidad}
+            </div>
+            <button class= "btn btn-info" id="remove-product" onClick="removeProduct( ${indice})">Eliminar producto</buton> `;
+            modalexcursion.appendChild(carritoContainer);
+            
+        });
+        const totalContainer = document.createElement("div");
+        totalContainer.className="total-carrito";
+        totalContainer.innerHTML= `<div class= "total"> TOTAL $ ${total}</div>
+        <button class= "btn btn-info finalizar" id="finalizar" onclick="finalizarCompra()"> FINALIZAR COMPRA </button>`
+        modalexcursion.appendChild(totalContainer)
+    } else {
+        modalexcursion.classList.remove("cart");
+        
+    }
+    };
+    
+    const removeProduct = (indice)=> {
+        cart.splice(indice,1);
+        dibujarCarrito();
+    
+    };
+    
+    const finalizarCompra = () => {
+        const total = document.getElementsByClassName("total")[0].innerHTML;
+        modalexcursion.innerHTML = "";
+        const compraFinalizada = `<div class "compra-finalizada"><p class="compra-parrafo"> YA CASI ES TUYA LA COMPRA, ${total}</p>
+        <div class ="datos-cliente">
+        <p class="datos-parrafo"> Complete el formulario con sus datos para coordinar la entrega</p>
+        <button class= "btn btn-info formulario" onClick="dibujarFormu()"> FORMULARIO </button></div>`; 
+        modalexcursion.innerHTML = compraFinalizada;
+
+
+        
+
+// const pagos = [];
+
+//FORMAS DE PAGO VERSION EVENTOS
+
+document.getElementById("eventos").addEventListener("mouseover", manejador);
+document.getElementById("eventos").addEventListener("mouseout", manejador);
+document.getElementById("credito").addEventListener("click", saludo);
+document.getElementById("debito").addEventListener("click", saludo);
+document.getElementById("efectivo").addEventListener("click", saludo);
+
+
+
+function manejador(e) {
+
+    switch(e.type){
+        case "mouseover":
+            this.style.color = "red";
+            break;
+        case "mouseout":
+            this.style.color = "black";
+            break;
+    }
+}
+
+function saludo(e) {
+    
+    alert("seleccionaste forma de pago " + e.target.id);
+        if(e.target.id == "credito") {
+            alert ("Tu compra se pagara en pesos segun la cotizacion del dolar al cierre de la tarjeta");
+            let credito = document.createElement("p");
+    credito.innerHTML = e.target.id
+    document.body.appendChild(credito);
+    
+        }
+        else if(e.target.id == "debito") {
+            alert ("tu compra fue realizada con exito");
+            let debito = document.createElement("p");
+    debito.innerHTML = e.target.id
+    document.body.appendChild(debito);
+        }
+        
+        else if(e.target.id == "efectivo") {
+            alert ("recibiras una tarjeta con descuentos durante tu estadia");
+            let efectivo = document.createElement("p");
+    efectivo.innerHTML = e.target.id
+    document.body.appendChild(efectivo);
+        }
+
+        class cliente {
+            constructor(nombre, telefono, direccion) {
+                this.nombre = nombre;
+                this.telefono = telefono;
+                this.direccion = direccion; 
+            }
+        }
+        
+        let boton = document.getElementById("enviarInfo");
+        boton.addEventListener("click", cargarCliente);
+    }
+}
+    
+
+
+
+
+
+// EJEMPLOS
+
 // let menu = ["cafe", "tostado", "jugo de naranja", "ensaladade frutas"];
 // localStorage.setItem("menu", JSON.stringify(menu));
 
@@ -137,231 +345,46 @@
 //     modalcarrito.innerHTML = compraFinalizada;
 // };
 
+// let menu = ["cafe", "tostado", "jugo de naranja", "ensaladade frutas"];
+// localStorage.setItem("menu", JSON.stringify(menu));
 
-
-let excursiones = [
-        {
-            id: 1,
-            nombre: "Paseo en barco",
-            precio: 4000,
-            // imagen: 
-        },
-        {
-            id: 2,
-            nombre: "Buceo",
-            precio: 7500,
-            // imagen: 
-        },
-        {
-            id: 3,
-            nombre: "Avistaje de delfines",
-            precio: 4500,
-            // imagen: 
-        },
-        {
-            id: 4,
-            nombre: "Snorkel",
-            precio: 600,
-            // imagen: 
-        },
-        {
-            id: 5,
-            nombre: "Camino de las 7 playas",
-            precio: 3500,
-            // imagen: 
-        },
-        {
-            id: 6,
-            nombre: "Montaña",
-            precio: 2000,
-            // imagen: 
-        },
-    ];
-    
-    
-    
-    
-    const dibujarExcursiones = () => {
-        let contenedor = document.getElementById("container");
-        excursiones.forEach((producto,indice) => {
-        let card = document.createElement("div");
-        card.classList.add("card", "col-sm-12", "col-lg-3");
-        card.innerHTML=`<img src="${producto.imagen}" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">${producto.nombre}</h5>
-          <p class="card-text">${producto.precio}</p>
-          <a href="#" class="btn btn-info" onClick="agregarAlCarrito(${indice})" >Comprar</a>
-        </div>`;
-        contenedor.appendChild(card);
-        });
-    }
-    dibujarExcursiones();
-    let cart = []
-    let modalexcursion = document.getElementById("cart")
-    
-    
-    const agregarAlCarrito = (indice) => {
-        const indiceEncontradoCarrito = cart.findIndex((elemento)=>{
-            return elemento.id === excursiones[indice].id
-        });
-        if(indiceEncontradoCarrito === -1){
-            const productoAgregar = excursiones[indice]
-            productoAgregar.cantidad = 1;
-            cart.push(productoAgregar);
-            dibujarCarrito();
-        }else{
-            cart[indiceEncontradoCarrito].cantidad +=1;
-            dibujarCarrito()
-        }
-    };
-    
-    
-    let total = 0;
-    const dibujarCarrito = ()=> {
-    modalexcursion.className = "cart";
-    modalexcursion.innerHTML="";
-    if(cart.length > 0){
-        cart.forEach((producto, indice)=>{
-            total = total + producto.precio * producto.cantidad;
-            const carritoContainer = document.createElement("div");
-            carritoContainer.className = "producto-carrito";
-            carritoContainer.innerHTML = `
-            <img class="car-img" src="${producto.imagen}"/>
-            <div class="product-details">
-            ${producto.nombre}
-            </div>
-            <div class="product-details"> Cantidad:
-            ${producto.cantidad}
-            </div>
-            <div class="product-details"> Precio: $
-            ${producto.precio}
-            </div>
-            <div class="product-details"> Subtotal: $ 
-            ${producto.precio * producto.cantidad}
-            </div>
-            <button class= "btn btn-info" id="remove-product" onClick="removeProduct( ${indice})">Eliminar producto</buton> `;
-            modalexcursion.appendChild(carritoContainer);
-            
-        });
-        const totalContainer = document.createElement("div");
-        totalContainer.className="total-carrito";
-        totalContainer.innerHTML= `<div class= "total"> TOTAL $ ${total}</div>
-        <button class= "btn btn-info finalizar" id="finalizar" onclick="finalizarCompra()"> FINALIZAR COMPRA </button>`
-        modalexcursion.appendChild(totalContainer)
-    } else {
-        modalexcursion.classList.remove("cart");
-        
-    }
-    };
-    
-    const removeProduct = (indice)=> {
-        cart.splice(indice,1);
-        dibujarCarrito();
-    
-    };
-    
-    const finalizarCompra = () => {
-        const total = document.getElementsByClassName("total")[0].innerHTML;
-        modalexcursion.innerHTML = "";
-        const compraFinalizada = `<div class "compra-finalizada"><p class="compra-parrafo"> YA CASI ES TUYA LA COMPRA, EL TOTAL ES $ ${total}</p>
-        <div class ="datos-cliente">
-        <p class="datos-parrafo"> Complete el formulario con sus datos para coordinar la entrega</p>
-        <button class= "btn btn-info formulario" onClick="dibujarFormu()"> FORMULARIO </button></div>`; 
-        modalexcursion.innerHTML = compraFinalizada;
-
-
-        
-    
-
-// const pagos = [];
-
-//FORMAS DE PAGO VERSION EVENTOS
-
-document.getElementById("eventos").addEventListener("mouseover", manejador);
-document.getElementById("eventos").addEventListener("mouseout", manejador);
-document.getElementById("credito").addEventListener("click", saludo);
-document.getElementById("debito").addEventListener("click", saludo);
-document.getElementById("efectivo").addEventListener("click", saludo);
+// let menuAlmacenados = JSON.parse(localStorage.getItem("menu"));
+// console.log(menuAlmacenados);
+// localStorage.removeItem("cursos");
 
 
 
-function manejador(e) {
 
-    switch(e.type){
-        case "mouseover":
-            this.style.color = "red";
-            break;
-        case "mouseout":
-            this.style.color = "black";
-            break;
-    }
-}
-
-function saludo(e) {
-    
-    alert("seleccionaste forma de pago " + e.target.id);
-        if(e.target.id == "credito") {
-            alert ("Tu compra se pagara en pesos segun la cotizacion del dolar al cierre de la tarjeta");
-            let credito = document.createElement("p");
-    credito.innerHTML = e.target.id
-    document.body.appendChild(credito);
-    
-        }
-        else if(e.target.id == "debito") {
-            alert ("tu compra fue realizada con exito");
-            let debito = document.createElement("p");
-    debito.innerHTML = e.target.id
-    document.body.appendChild(debito);
-        }
-        
-        else if(e.target.id == "efectivo") {
-            alert ("recibiras una tarjeta con descuentos durante tu estadia");
-            let efectivo = document.createElement("p");
-    efectivo.innerHTML = e.target.id
-    document.body.appendChild(efectivo);
-        }
-
-        class cliente {
-            constructor(nombre, telefono, direccion) {
-                this.nombre = nombre;
-                this.telefono = telefono;
-                this.direccion = direccion; 
-            }
-        }
-        
-        let boton = document.getElementById("enviarInfo");
-        boton.addEventListener("click", cargarCliente);
-        
         //capturar elementos
-        function cargarCliente() {
-            let nombre = document.getElementById("name").value;
-            let telefono = document.getElementById("phone").value;
-            let direccion = document.getElementById("adress").value;
-            let cliente1 = new cliente (nombre, telefono, direccion);
-            console.log(cliente1);
-            mostrarCliente(cliente1);
-        }
+//         function cargarCliente() {
+//             let nombre = document.getElementById("name").value;
+//             let telefono = document.getElementById("phone").value;
+//             let direccion = document.getElementById("adress").value;
+//             let cliente1 = new cliente (nombre, telefono, direccion);
+//             console.log(cliente1);
+//             mostrarCliente(cliente1);
+//         }
         
-        //eliminar elementos
+//         //eliminar elementos
         
-        function mostrarCliente(cliente) {
-            let formulario = document.getElementById("customer");
-            formulario.innerHTML = "";
+//         function mostrarCliente(cliente) {
+//             let formulario = document.getElementById("customer");
+//             formulario.innerHTML = "";
             
-            //agregar elementos
-            let nuevoContenido = document.createElement("div");
-            nuevoContenido.innerHTML = `<h1> Gracias ${cliente.nombre} sus datos fueron registrados y en breve recibira su pedido en ${cliente.direccion}</h1>`;
+//             //agregar elementos
+//             let nuevoContenido = document.createElement("div");
+//             nuevoContenido.innerHTML = `<h1> Gracias ${cliente.nombre} sus datos fueron registrados y en breve recibira su pedido en ${cliente.direccion}</h1>`;
         
-            nuevoContenido.className = "info-cliente";
-            formulario.appendChild(nuevoContenido);
-        }
+//             nuevoContenido.className = "info-cliente";
+//             formulario.appendChild(nuevoContenido);
+//         }
 
 
 
 
-}
+// };
 
-};
+
 // const elegido = [];
 
 //         elegido.push(new excursiones(001 , "Buceo" , 1 , 5000))
